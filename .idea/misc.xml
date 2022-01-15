@@ -6,16 +6,19 @@
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/drawable/bg_border.xml" value="0.2526041666666667" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/drawable/bg_rounded.xml" value="0.2526041666666667" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/drawable/bg_rounded_login.xml" value="0.2526041666666667" />
-        <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_category_add.xml" value="0.4" />
+        <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_category_add.xml" value="0.2" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_homepage.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_main.xml" value="0.23645833333333333" />
+        <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_product.xml" value="0.176" />
+        <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_product_add.xml" value="0.22239583333333332" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/activity_register.xml" value="0.23645833333333333" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/fragment_chat.xml" value="0.22239583333333332" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/fragment_order.xml" value="0.23645833333333333" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/fragment_product.xml" value="0.2" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/item_category.xml" value="0.4" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/item_product.xml" value="0.536" />
+        <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/layout/item_product_grid.xml" value="0.2" />
         <entry key="..\:/TUBES_GALERI/KebunMade/app/src/main/res/menu/bottom_nav_menu.xml" value="0.23282051282051283" />
       </map>
     </option>

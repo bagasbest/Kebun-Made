@@ -45,12 +45,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun formValidation() {
         val number = binding?.numberPhone?.text.toString().trim()
+        val password = binding?.password?.text.toString().trim()
 
         if(number.isEmpty()) {
             Toast.makeText(this, "Nomor handphone tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return
         } else if(number.length < 11 || number.length > 14) {
             Toast.makeText(this, "Panjang karakter Nomor handphone adalah 11 - 14 karakter", Toast.LENGTH_SHORT).show()
+            return
+        } else if (password.isEmpty()) {
+            Toast.makeText(this, "Kata sandi tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -76,7 +80,6 @@ class LoginActivity : AppCompatActivity() {
                 /// jika terdaftar maka ambil email di database, kemudian lakukan autentikasi menggunakan email & password dari user
                 for (snapshot in task.result) {
                     val email = "" + snapshot["email"]
-                    val password = "" + snapshot["password"]
 
                     /// fungsi untuk mengecek, apakah email yang di inputkan ketika login sudah terdaftar di database atau belum
                     FirebaseAuth

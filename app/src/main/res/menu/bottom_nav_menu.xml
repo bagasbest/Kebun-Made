@@ -8,12 +8,12 @@
         android:title="Home" />
 
     <item
-        android:id="@+id/navigation_food_menu"
+        android:id="@+id/navigation_order"
         android:icon="@drawable/ic_baseline_all_inbox_24"
         android:title="Pesanan" />
 
     <item
-        android:id="@+id/navigation_point"
+        android:id="@+id/navigation_chat"
         android:icon="@drawable/ic_baseline_chat_24"
         android:title="Chat" />
 </menu>

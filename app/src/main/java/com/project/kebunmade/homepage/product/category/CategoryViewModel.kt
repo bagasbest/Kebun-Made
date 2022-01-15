@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class CategoryViewModel : ViewModel() {
 
-    private val rewardList = MutableLiveData<ArrayList<CategoryModel>>()
+    private val categoryList = MutableLiveData<ArrayList<CategoryModel>>()
     private val listItems = ArrayList<CategoryModel>()
     private val TAG = CategoryViewModel::class.java.simpleName
 
@@ -28,7 +28,7 @@ class CategoryViewModel : ViewModel() {
 
                         listItems.add(model)
                     }
-                    rewardList.postValue(listItems)
+                    categoryList.postValue(listItems)
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "Error getting documents: ", exception)
@@ -39,6 +39,6 @@ class CategoryViewModel : ViewModel() {
     }
 
     fun getCategoryList() : LiveData<ArrayList<CategoryModel>> {
-        return rewardList
+        return categoryList
     }
 }

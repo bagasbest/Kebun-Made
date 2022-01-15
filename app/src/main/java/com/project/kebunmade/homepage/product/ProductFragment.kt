@@ -25,6 +25,11 @@ class ProductFragment : Fragment() {
     private var role: String? = null
     private var categoryAdapter: CategoryAdapter? = null
 
+    override fun onResume() {
+        super.onResume()
+        showCategory()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +39,6 @@ class ProductFragment : Fragment() {
 
         checkRole()
         showOnboardingImage()
-        showCategory()
 
         return binding?.root
     }

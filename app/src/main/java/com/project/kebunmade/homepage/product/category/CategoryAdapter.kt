@@ -1,11 +1,13 @@
 package com.project.kebunmade.homepage.product.category
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.kebunmade.databinding.ItemCategoryBinding
+import com.project.kebunmade.homepage.product.product.ProductActivity
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
@@ -27,7 +29,9 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
                 title.text = model.category
                 cv.setOnClickListener {
-
+                    val intent = Intent(itemView.context, ProductActivity::class.java)
+                    intent.putExtra(ProductActivity.EXTRA_CATEGORY, model.category)
+                    itemView.context.startActivity(intent)
                 }
 
             }
