@@ -51,6 +51,7 @@ class ProductAddActivity : AppCompatActivity() {
         val name = binding?.name?.text.toString().trim()
         val description = binding?.description?.text.toString().trim()
         val price = binding?.price?.text.toString().trim()
+        val category = intent.getStringExtra(EXTRA_CATEGORY)
 
         when {
             name.isEmpty() -> {
@@ -71,7 +72,7 @@ class ProductAddActivity : AppCompatActivity() {
                 val productId = System.currentTimeMillis().toString()
 
                 val data = mapOf(
-                    "category" to intent.getStringExtra(EXTRA_CATEGORY),
+                    "category" to category,
                     "productId" to productId,
                     "image" to dp,
                     "name" to name,

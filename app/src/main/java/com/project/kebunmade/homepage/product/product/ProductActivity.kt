@@ -15,6 +15,7 @@ class ProductActivity : AppCompatActivity() {
     private var binding: ActivityProductBinding? = null
     private var role: String? = null
     private var adapter: ProductAdapter? = null
+    private var category: String? = null
 
     override fun onResume() {
         super.onResume()
@@ -22,6 +23,7 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun initProduct() {
+        category = intent.getStringExtra(EXTRA_CATEGORY)
         binding?.rvProduct?.layoutManager = StaggeredGridLayoutManager(
             2,
             StaggeredGridLayoutManager.VERTICAL
@@ -32,7 +34,11 @@ class ProductActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
         binding?.progressBar?.visibility = View.VISIBLE
-        intent.getStringExtra(EXTRA_CATEGORY)?.let { viewModel.setListCategory(it) }
+        if(category != "Semua Kategori") {
+            viewModel.setListCategory(category!!)
+        } else {
+            viewModel.setListCategoryAll()
+        }
         viewModel.getProductList().observe(this) { product ->
             if (product.size > 0) {
                 binding?.progressBar?.visibility = View.GONE
@@ -52,11 +58,12 @@ class ProductActivity : AppCompatActivity() {
 
         checkRole()
 
-        binding?.category?.text =  intent.getStringExtra(EXTRA_CATEGORY)
+        val category = intent.getStringExtra(EXTRA_CATEGORY)
+        binding?.category?.text =  category
 
         binding?.productAdd?.setOnClickListener {
             val intent = Intent(this, ProductAddActivity::class.java)
-            intent.putExtra(ProductAddActivity.EXTRA_CATEGORY, intent.getStringExtra(EXTRA_CATEGORY))
+            intent.putExtra(ProductAddActivity.EXTRA_CATEGORY, category)
             startActivity(intent)
         }
 
@@ -75,7 +82,7 @@ class ProductActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 role = "" + it.data?.get("role")
-                if(role == "admin") {
+                if(role == "admin" && category != "Semua Kategori") {
                     binding?.productAdd?.visibility = View.VISIBLE
                 }
             }

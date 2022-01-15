@@ -42,7 +42,38 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-    fun getProductList() : LiveData<ArrayList<ProductModel>> {
+    fun setListCategoryAll() {
+        listItems.clear()
+
+
+        try {
+            FirebaseFirestore.getInstance().collection("product")
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val model = ProductModel()
+                        model.category = document.data["category"].toString()
+                        model.productId = document.data["productId"].toString()
+                        model.image = document.data["image"].toString()
+                        model.price = document.data["price"].toString().toLong()
+                        model.name = document.data["name"].toString()
+                        model.description = document.data["description"].toString()
+
+                        listItems.add(model)
+                    }
+                    productList.postValue(listItems)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents: ", exception)
+                }
+        } catch (error: Exception) {
+            error.printStackTrace()
+        }
+    }
+
+    fun getProductList(): LiveData<ArrayList<ProductModel>> {
         return productList
     }
+
+
 }
