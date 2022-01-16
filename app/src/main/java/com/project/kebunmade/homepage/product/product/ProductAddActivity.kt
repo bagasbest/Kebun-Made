@@ -50,6 +50,8 @@ class ProductAddActivity : AppCompatActivity() {
     private fun formValidation() {
         val name = binding?.name?.text.toString().trim()
         val description = binding?.description?.text.toString().trim()
+        val info = binding?.info?.text.toString().trim()
+        val caraPenyimpanan = binding?.caraPenyimpanan?.text.toString().trim()
         val price = binding?.price?.text.toString().trim()
         val category = intent.getStringExtra(EXTRA_CATEGORY)
 
@@ -59,6 +61,12 @@ class ProductAddActivity : AppCompatActivity() {
             }
             description.isEmpty() -> {
                 Toast.makeText(this, "Deskripsi produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            }
+            info.isEmpty() -> {
+                Toast.makeText(this, "Informasi mengenai produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            }
+            caraPenyimpanan.isEmpty() -> {
+                Toast.makeText(this, "Cara penyimpanan produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
             price.isEmpty()  || price == "0" -> {
                 Toast.makeText(this, "Harga produk tidak boleh kosong atau nol", Toast.LENGTH_SHORT).show()
@@ -74,6 +82,8 @@ class ProductAddActivity : AppCompatActivity() {
                 val data = mapOf(
                     "category" to category,
                     "productId" to productId,
+                    "info" to info,
+                    "caraPenyimpanan" to caraPenyimpanan,
                     "image" to dp,
                     "name" to name,
                     "description" to description,

@@ -17,6 +17,8 @@ import com.project.kebunmade.databinding.FragmentProductBinding
 import com.project.kebunmade.homepage.product.category.CategoryAdapter
 import com.project.kebunmade.homepage.product.category.CategoryAddActivity
 import com.project.kebunmade.homepage.product.category.CategoryViewModel
+import com.project.kebunmade.homepage.product.product.ProductFragmentAdapter
+import com.project.kebunmade.homepage.product.product.ProductViewModel
 
 
 class ProductFragment : Fragment() {
@@ -24,10 +26,41 @@ class ProductFragment : Fragment() {
     private var binding: FragmentProductBinding? = null
     private var role: String? = null
     private var categoryAdapter: CategoryAdapter? = null
+    private var productAdapter: ProductFragmentAdapter? = null
 
     override fun onResume() {
         super.onResume()
         showCategory()
+        initLatestProduct()
+    }
+
+    private fun initLatestProduct() {
+        val layoutManager = LinearLayoutManager(
+            activity,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        binding?.newProductRv?.layoutManager = layoutManager
+
+        productAdapter = ProductFragmentAdapter()
+        binding?.newProductRv?.adapter = productAdapter
+
+        val viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
+        binding?.progressBarNewProduct?.visibility = View.VISIBLE
+        viewModel.setListProductAll()
+        viewModel.getProductList().observe(viewLifecycleOwner) { product ->
+            if (product.size > 0) {
+                binding?.progressBarNewProduct?.visibility = View.GONE
+                productAdapter!!.setData(product)
+                binding?.noDataNewProduct?.visibility = View.GONE
+            } else {
+                binding?.progressBarNewProduct?.visibility = View.GONE
+                binding?.noDataNewProduct?.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun onCreateView(

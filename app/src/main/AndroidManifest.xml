@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KebunMade">
         <activity
+            android:name=".homepage.product.product.ProductDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".homepage.product.product.ProductAddActivity"
             android:exported="false" />
         <activity

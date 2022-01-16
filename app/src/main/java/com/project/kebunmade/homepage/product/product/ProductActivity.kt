@@ -35,9 +35,9 @@ class ProductActivity : AppCompatActivity() {
 
         binding?.progressBar?.visibility = View.VISIBLE
         if(category != "Semua Kategori") {
-            viewModel.setListCategory(category!!)
+            viewModel.setListProduct(category!!)
         } else {
-            viewModel.setListCategoryAll()
+            viewModel.setListProductAll()
         }
         viewModel.getProductList().observe(this) { product ->
             if (product.size > 0) {

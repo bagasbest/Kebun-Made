@@ -12,7 +12,7 @@ class ProductViewModel : ViewModel() {
     private val listItems = ArrayList<ProductModel>()
     private val TAG = ProductViewModel::class.java.simpleName
 
-    fun setListCategory(category: String) {
+    fun setListProduct(category: String) {
         listItems.clear()
 
 
@@ -29,6 +29,8 @@ class ProductViewModel : ViewModel() {
                         model.price = document.data["price"].toString().toLong()
                         model.name = document.data["name"].toString()
                         model.description = document.data["description"].toString()
+                        model.info = document.data["info"].toString()
+                        model.caraPenyimpanan = document.data["caraPenyimpanan"].toString()
 
                         listItems.add(model)
                     }
@@ -42,7 +44,7 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-    fun setListCategoryAll() {
+    fun setListProductAll() {
         listItems.clear()
 
 
@@ -58,6 +60,8 @@ class ProductViewModel : ViewModel() {
                         model.price = document.data["price"].toString().toLong()
                         model.name = document.data["name"].toString()
                         model.description = document.data["description"].toString()
+                        model.info = document.data["info"].toString()
+                        model.caraPenyimpanan = document.data["caraPenyimpanan"].toString()
 
                         listItems.add(model)
                     }

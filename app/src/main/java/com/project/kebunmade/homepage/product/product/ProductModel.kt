@@ -11,4 +11,6 @@ data class ProductModel(
     var image: String? = null,
     var productId: String? = null,
     var category: String? = null,
+    var info: String? = null,
+    var caraPenyimpanan: String? = null,
 ) : Parcelable

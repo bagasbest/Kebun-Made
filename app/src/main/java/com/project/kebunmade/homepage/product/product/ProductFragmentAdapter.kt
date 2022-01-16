@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.project.kebunmade.databinding.ItemProductGridBinding
+import com.project.kebunmade.databinding.ItemProductBinding
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
-class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
+class ProductFragmentAdapter : RecyclerView.Adapter<ProductFragmentAdapter.ViewHolder>() {
 
     private val productList = ArrayList<ProductModel>()
     @SuppressLint("NotifyDataSetChanged")
@@ -21,7 +21,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     }
 
 
-    inner class ViewHolder(private val binding: ItemProductGridBinding)  : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding: ItemProductBinding)  : RecyclerView.ViewHolder(binding.root){
         @SuppressLint("SetTextI18n")
         fun bind(model: ProductModel) {
             val formatter: NumberFormat = DecimalFormat("#,###")
@@ -51,7 +51,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemProductGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
