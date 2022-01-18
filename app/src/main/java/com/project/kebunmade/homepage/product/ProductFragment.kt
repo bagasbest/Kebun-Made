@@ -14,9 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.project.kebunmade.R
 import com.project.kebunmade.databinding.FragmentProductBinding
+import com.project.kebunmade.homepage.product.cart.CartActivity
 import com.project.kebunmade.homepage.product.category.CategoryAdapter
 import com.project.kebunmade.homepage.product.category.CategoryAddActivity
 import com.project.kebunmade.homepage.product.category.CategoryViewModel
+import com.project.kebunmade.homepage.product.product.ProductActivity
 import com.project.kebunmade.homepage.product.product.ProductFragmentAdapter
 import com.project.kebunmade.homepage.product.product.ProductViewModel
 
@@ -121,11 +123,13 @@ class ProductFragment : Fragment() {
         }
 
         binding?.cart?.setOnClickListener {
-
+            startActivity(Intent(activity, CartActivity::class.java))
         }
 
         binding?.seeAllNewProduct?.setOnClickListener {
-
+            val intent = Intent(activity, ProductActivity::class.java)
+            intent.putExtra(ProductActivity.EXTRA_CATEGORY, "Semua Kategori")
+            startActivity(intent)
         }
 
         binding?.categoryAdd?.setOnClickListener {

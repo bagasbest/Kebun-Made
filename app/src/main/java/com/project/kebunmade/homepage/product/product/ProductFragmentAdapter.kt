@@ -1,11 +1,15 @@
 package com.project.kebunmade.homepage.product.product
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.project.kebunmade.databinding.ItemProductBinding
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -42,7 +46,42 @@ class ProductFragmentAdapter : RecyclerView.Adapter<ProductFragmentAdapter.ViewH
                 }
 
                 appCompatButton.setOnClickListener {
+                    val mProgressDialog = ProgressDialog(itemView.context)
 
+                    mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...")
+                    mProgressDialog.setCanceledOnTouchOutside(false)
+                    mProgressDialog.show()
+
+
+                    val cartId = System.currentTimeMillis().toString()
+                    val uid = FirebaseAuth.getInstance().currentUser!!.uid
+
+                    val cart = mapOf(
+                        "cartId" to cartId,
+                        "userId" to uid,
+                        "name" to model.name,
+                        "qty" to 1,
+                        "price" to model.price,
+                        "description" to model.description,
+                        "image" to model.image,
+                        "productId" to model.productId,
+                        "category" to model.category
+                    )
+
+                    FirebaseFirestore
+                        .getInstance()
+                        .collection("cart")
+                        .document(cartId)
+                        .set(cart)
+                        .addOnCompleteListener {
+                            if(it.isSuccessful) {
+                                mProgressDialog.dismiss()
+                                Toast.makeText(itemView.context, "Berhasil menambahkan produk ${model.name} kedalam keranjang!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                mProgressDialog.dismiss()
+                                Toast.makeText(itemView.context, "Ups,anda gagal menambahkan produk ${model.name} kedalam keranjang!", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                 }
 
             }

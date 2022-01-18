@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.project.kebunmade.databinding.ActivityProductBinding
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.project.kebunmade.homepage.product.cart.CartActivity
 
 class ProductActivity : AppCompatActivity() {
 
@@ -71,6 +72,9 @@ class ProductActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        binding?.cart?.setOnClickListener {
+            startActivity(Intent(this, CartActivity::class.java))
+        }
     }
 
     private fun checkRole() {
