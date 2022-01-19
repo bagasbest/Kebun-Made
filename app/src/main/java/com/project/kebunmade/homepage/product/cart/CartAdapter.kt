@@ -2,7 +2,10 @@ package com.project.kebunmade.homepage.product.cart
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,7 +14,11 @@ import com.project.kebunmade.databinding.ItemCartBinding
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
-class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
+class CartAdapter(
+    private val subTotalPrice: TextView?,
+    private val checkoutButton: Button?,
+    private val option: String
+) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
     private val cartList = ArrayList<CartModel>()
     @SuppressLint("NotifyDataSetChanged")
@@ -35,6 +42,10 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
                 qty.text = "Kuantitas: ${model.qty.toString()}"
                 price.text = "Rp. ${formatter.format(model.price)}"
 
+                if(option == "cart") {
+                    delete.visibility = View.VISIBLE
+                }
+
                 delete.setOnClickListener {
                     model.cartId?.let { it1 ->
                         FirebaseFirestore
@@ -46,6 +57,20 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
                                 if(task.isSuccessful) {
                                     cartList.removeAt(adapterPosition)
                                     notifyDataSetChanged()
+
+                                    if(cartList.size > 0) {
+                                        var subtotal = 0L
+                                        for(i in cartList.indices) {
+                                            subtotal += cartList[i].price!!
+                                        }
+
+                                        subTotalPrice?.text = "Rp. ${formatter.format(subtotal)}"
+                                    } else {
+                                        checkoutButton?.visibility = View.GONE
+                                        subTotalPrice?.text = "Rp.0"
+                                    }
+
+
                                 } else {
                                     Toast.makeText(itemView.context, "Gagal menghapus produk ini, silahkan periksa koneksi internet anda dan coba lagi nanti", Toast.LENGTH_SHORT).show()
                                 }

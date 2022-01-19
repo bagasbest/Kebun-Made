@@ -83,6 +83,7 @@
             android:layout_width="30dp"
             android:id="@+id/delete"
             android:layout_height="30dp"
+            android:visibility="gone"
             android:contentDescription="@string/image"
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_baseline_delete_24"
