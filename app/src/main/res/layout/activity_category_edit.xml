@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".homepage.product.category.CategoryAddActivity">
+    tools:context=".homepage.product.category.CategoryEditActivity">
+
 
 
     <TextView
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16sp"
         android:fontFamily="@font/bold"
-        android:text="Tambahkan Kategori Baru"
+        android:text="Edit Kategori"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/backButton"
@@ -62,7 +63,6 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:hint="Kategori" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -82,6 +82,7 @@
     <ImageView
         android:id="@+id/imageHint"
         android:layout_width="70dp"
+        android:contentDescription="@string/image"
         android:layout_height="70dp"
         android:src="@drawable/ic_baseline_add_a_photo_24"
         app:layout_constraintBottom_toBottomOf="@+id/image"
@@ -102,18 +103,19 @@
         app:layout_constraintTop_toBottomOf="@+id/image" />
 
     <Button
-        android:id="@+id/add"
+        android:id="@+id/edit"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginStart="16sp"
         android:layout_marginEnd="16sp"
         android:layout_marginBottom="16sp"
         android:backgroundTint="@color/blue"
-        android:text="Tambah Kategori Terbaru"
+        android:text="Perbarui Kategori"
         android:textAllCaps="false"
         android:layout_marginTop="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

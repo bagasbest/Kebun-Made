@@ -66,7 +66,7 @@ class CartAdapter(
 
                                         subTotalPrice?.text = "Rp. ${formatter.format(subtotal)}"
                                     } else {
-                                        checkoutButton?.visibility = View.GONE
+                                        checkoutButton?.visibility = View.INVISIBLE
                                         subTotalPrice?.text = "Rp.0"
                                     }
 

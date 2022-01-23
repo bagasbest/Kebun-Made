@@ -19,70 +19,72 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
+            <View
+                android:id="@+id/view13"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:scaleType="centerCrop"
                 android:contentDescription="@string/image"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.35"
+                app:layout_constraintHeight_percent="0.3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/view13" />
 
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/backButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/bg_rounded"
-                android:backgroundTint="@color/blue"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_baseline_arrow_back_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/cart"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_rounded"
-                android:backgroundTint="@color/blue"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_baseline_shopping_cart_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/edit"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="16dp"
                 android:visibility="gone"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_rounded"
-                android:backgroundTint="@android:color/holo_red_dark"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_baseline_edit_24"
                 app:layout_constraintEnd_toStartOf="@+id/cart"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/delete"
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:visibility="gone"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_rounded"
-                android:backgroundTint="@android:color/holo_red_dark"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_baseline_delete_24"
                 app:layout_constraintEnd_toStartOf="@+id/edit"
@@ -129,6 +131,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
 
+            <com.codesgood.views.JustifiedTextView
+                android:id="@+id/textView30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="* Harap chat admin terlebih dahulu untuk mengonfirmasi ketersediaan produk!"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/price" />
+
             <View
                 android:id="@+id/view5"
                 android:layout_width="match_parent"
@@ -137,7 +152,7 @@
                 android:background="#D5D5D5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/price" />
+                app:layout_constraintTop_toBottomOf="@+id/textView30" />
 
 
             <TextView
@@ -223,6 +238,8 @@
                 android:id="@+id/sameCategoryProductRv"
                 android:layout_width="match_parent"
                 android:layout_height="320dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
                 tools:listitem="@layout/item_product" />
 
@@ -265,6 +282,7 @@
         android:contentDescription="@string/image"
         android:layout_marginBottom="16sp"
         android:layout_marginStart="16sp"
+        android:visibility="gone"
         android:background="@drawable/bg_border"
         android:src="@drawable/ic_baseline_chat_24"
         app:layout_constraintBottom_toBottomOf="parent"

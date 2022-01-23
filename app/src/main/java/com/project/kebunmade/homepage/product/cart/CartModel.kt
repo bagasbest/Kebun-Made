@@ -1,5 +1,9 @@
 package com.project.kebunmade.homepage.product.cart
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class CartModel(
     var cartId: String? = null,
     var userId: String? = null,
@@ -10,4 +14,4 @@ data class CartModel(
     var image: String? = null,
     var productId: String? = null,
     var category: String? = null,
-)
+) : Parcelable

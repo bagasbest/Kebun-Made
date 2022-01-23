@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -20,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.project.kebunmade.R
 import com.project.kebunmade.databinding.ActivityProductDetailBinding
+import com.project.kebunmade.homepage.chat.ChatModel
+import com.project.kebunmade.homepage.chat.message.MessageActivity
 import com.project.kebunmade.homepage.product.cart.CartActivity
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -31,12 +34,8 @@ class ProductDetailActivity : AppCompatActivity() {
     private var productAdapter: ProductFragmentAdapter? = null
 
     @SuppressLint("SetTextI18n")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityProductDetailBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
-
-        checkRole()
+    override fun onResume() {
+        super.onResume()
 
         model = intent.getParcelableExtra(EXTRA_PRODUCT)
         val formatter: NumberFormat = DecimalFormat("#,###")
@@ -52,7 +51,15 @@ class ProductDetailActivity : AppCompatActivity() {
         binding?.price?.text = "Rp. ${formatter.format(model?.price)}"
         binding?.info?.text = model?.info
         binding?.caraPenyimpanan?.text = model?.caraPenyimpanan
+    }
 
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityProductDetailBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+
+        checkRole()
 
         binding?.backButton?.setOnClickListener {
             onBackPressed()
@@ -64,6 +71,93 @@ class ProductDetailActivity : AppCompatActivity() {
 
         binding?.cart?.setOnClickListener {
             startActivity(Intent(this, CartActivity::class.java))
+        }
+
+        binding?.edit?.setOnClickListener {
+          val intent = Intent(this, ProductEditActivity::class.java)
+            intent.putExtra(ProductEditActivity.EXTRA_PRODUCT, model)
+            startActivity(intent)
+        }
+
+        binding?.delete?.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Hapus Produk")
+                .setMessage("Apakah anda yakin ingin menghapus produk ${model?.name} ?")
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                .setPositiveButton("OKE") { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                    deleteProduct()
+                }
+                .setNegativeButton("TIDAK", null)
+                .show()
+        }
+
+        binding?.chat?.setOnClickListener {
+            val mProgressDialog = ProgressDialog(this)
+
+            mProgressDialog.setMessage("Please wait until process finish...")
+            mProgressDialog.setCanceledOnTouchOutside(false)
+            mProgressDialog.show()
+
+            val customerId = FirebaseAuth.getInstance().currentUser!!.uid
+
+            FirebaseFirestore
+                .getInstance()
+                .collection("users")
+                .document(customerId)
+                .get()
+                .addOnSuccessListener {
+                    val customerName = it.data?.get("name").toString()
+                    val role = it.data?.get("role").toString()
+
+                    val data = mapOf(
+                        "customerId" to customerId,
+                        "customerName" to customerName,
+                        "dateTime" to "",
+                        "lastMessage" to "",
+                    )
+
+
+                    FirebaseFirestore
+                        .getInstance()
+                        .collection("chat")
+                        .document(customerId)
+                        .set(data)
+                        .addOnCompleteListener { task ->
+                            if(task.isSuccessful) {
+                                mProgressDialog.dismiss()
+
+                                val model = ChatModel()
+                                model.customerId = customerId
+                                model.customerName = customerName
+                                model.dateTime = ""
+                                model.lastMessage = ""
+
+                               val intent = Intent (this, MessageActivity::class.java)
+                                intent.putExtra(MessageActivity.EXTRA_MESSAGE, model)
+                                intent.putExtra(MessageActivity.ROLE, role)
+                                startActivity(intent)
+
+                            } else {
+                                Toast.makeText(this, "Gagal melakukan chat dengan admin, sepertinya terdapat kendala dengan koneksi internet anda", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                }
+        }
+    }
+
+    private fun deleteProduct() {
+        model?.productId?.let {
+            FirebaseFirestore
+                .getInstance()
+                .collection("product")
+                .document(it)
+                .delete()
+                .addOnCompleteListener {
+                    Toast.makeText(this, "Berhasil menghapus produk ${model?.name}", Toast.LENGTH_SHORT).show()
+                    onBackPressed()
+                }
         }
     }
 
@@ -178,6 +272,8 @@ class ProductDetailActivity : AppCompatActivity() {
                 if (role == "admin") {
                     binding?.edit?.visibility = View.VISIBLE
                     binding?.delete?.visibility = View.VISIBLE
+                } else {
+                    binding?.chat?.visibility = View.VISIBLE
                 }
             }
     }

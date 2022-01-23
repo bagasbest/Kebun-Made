@@ -1,4 +1,4 @@
-package com.project.kebunmade.homepage.product.product
+package com.project.kebunmade.homepage.product.category
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -14,27 +14,33 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.project.kebunmade.R
-import com.project.kebunmade.databinding.ActivityProductAddBinding
-import java.util.*
+import com.project.kebunmade.databinding.ActivityCategoryEditBinding
+import com.project.kebunmade.homepage.HomepageActivity
 
-class ProductAddActivity : AppCompatActivity() {
+class CategoryEditActivity : AppCompatActivity() {
 
-    private var binding: ActivityProductAddBinding? = null
+    private var binding: ActivityCategoryEditBinding? = null
     private var dp: String? = null
     private val REQUEST_FROM_GALLERY = 1001
+    private var categoryId: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityProductAddBinding.inflate(layoutInflater)
+        binding = ActivityCategoryEditBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+
+        val category = intent.getStringExtra(EXTRA_CATEGORY)
+        binding?.title?.setText(category)
+
+        getImage(category!!)
 
         binding?.backButton?.setOnClickListener {
             onBackPressed()
         }
 
 
-        binding?.add?.setOnClickListener {
+        binding?.edit?.setOnClickListener {
             formValidation()
         }
 
@@ -45,77 +51,75 @@ class ProductAddActivity : AppCompatActivity() {
                 .compress(1024)
                 .start(REQUEST_FROM_GALLERY);
         }
+
+
     }
 
-
     private fun formValidation() {
-        val name = binding?.name?.text.toString().trim()
-        val description = binding?.description?.text.toString().trim()
-        val info = binding?.info?.text.toString().trim()
-        val caraPenyimpanan = binding?.caraPenyimpanan?.text.toString().trim()
-        val price = binding?.price?.text.toString().trim()
-        val category = intent.getStringExtra(EXTRA_CATEGORY)
+        val category = binding?.title?.text.toString().trim()
 
         when {
-            name.isEmpty() -> {
-                Toast.makeText(this, "Nama produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            }
-            description.isEmpty() -> {
-                Toast.makeText(this, "Deskripsi produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            }
-            info.isEmpty() -> {
-                Toast.makeText(this, "Informasi mengenai produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            }
-            caraPenyimpanan.isEmpty() -> {
-                Toast.makeText(this, "Cara penyimpanan produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            }
-            price.isEmpty()  || price == "0" -> {
-                Toast.makeText(this, "Harga produk tidak boleh kosong atau nol", Toast.LENGTH_SHORT).show()
-            }
-            dp == null -> {
-                Toast.makeText(this, "Gambar produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            category.isEmpty() -> {
+                Toast.makeText(this, "Kategori tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
             else -> {
 
                 binding?.progressBar?.visibility = View.VISIBLE
-                val productId = System.currentTimeMillis().toString()
 
-                val data = mapOf(
-                    "category" to category,
-                    "productId" to productId,
-                    "info" to info,
-                    "caraPenyimpanan" to caraPenyimpanan,
-                    "image" to dp,
-                    "name" to name,
-                    "nameTemp" to name.lowercase(Locale.getDefault()),
-                    "description" to description,
-                    "price" to price.toLong()
-                )
+                if (dp != null) {
 
-                FirebaseFirestore
-                    .getInstance()
-                    .collection("product")
-                    .document(productId)
-                    .set(data)
-                    .addOnCompleteListener {
-                        if(it.isSuccessful) {
-                            binding?.progressBar?.visibility = View.GONE
-                            showSuccessDialog()
-                        } else {
-                            binding?.progressBar?.visibility = View.GONE
-                            showFailureDialog()
+                    val data = mapOf(
+                        "category" to category,
+                        "image" to dp,
+                    )
+
+                    FirebaseFirestore
+                        .getInstance()
+                        .collection("category")
+                        .document(categoryId!!)
+                        .update(data)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                binding?.progressBar?.visibility = View.GONE
+                                showSuccessDialog()
+                            } else {
+                                binding?.progressBar?.visibility = View.GONE
+                                showFailureDialog()
+                            }
                         }
-                    }
 
+                } else {
+
+                    val data = mapOf(
+                        "category" to category,
+                    )
+
+                    FirebaseFirestore
+                        .getInstance()
+                        .collection("category")
+                        .document(categoryId!!)
+                        .update(data)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                binding?.progressBar?.visibility = View.GONE
+                                showSuccessDialog()
+                            } else {
+                                binding?.progressBar?.visibility = View.GONE
+                                showFailureDialog()
+                            }
+                        }
+
+                }
             }
+
         }
     }
 
 
     private fun showFailureDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Gagal Menambahkan Produk")
-            .setMessage("Terdapat kesalahan ketika menambahkan produk, silahkan periksa koneksi internet anda, dan coba lagi nanti")
+            .setTitle("Gagal Menambahkan Kategori")
+            .setMessage("Terdapat kesalahan ketika menambahkan kategori, silahkan periksa koneksi internet anda, dan coba lagi nanti")
             .setIcon(R.drawable.ic_baseline_clear_24)
             .setPositiveButton("OKE") { dialogInterface, _ ->
                 dialogInterface.dismiss()
@@ -125,12 +129,15 @@ class ProductAddActivity : AppCompatActivity() {
 
     private fun showSuccessDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Berhasil Menambahkan Produk")
-            .setMessage("Produk terbaru ini akan segera terbit")
+            .setTitle("Berhasil Memperbarui Kategori")
+            .setMessage("Sukses")
             .setIcon(R.drawable.ic_baseline_check_circle_outline_24)
             .setPositiveButton("OKE") { dialogInterface, _ ->
                 dialogInterface.dismiss()
-                onBackPressed()
+                val intent = Intent(this, HomepageActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
             }
             .show()
     }
@@ -152,7 +159,7 @@ class ProductAddActivity : AppCompatActivity() {
         mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...")
         mProgressDialog.setCanceledOnTouchOutside(false)
         mProgressDialog.show()
-        val imageFileName = "product/image_" + System.currentTimeMillis() + ".png"
+        val imageFileName = "category/image_" + System.currentTimeMillis() + ".png"
         mStorageRef.child(imageFileName).putFile(data!!)
             .addOnSuccessListener {
                 mStorageRef.child(imageFileName).downloadUrl
@@ -186,12 +193,30 @@ class ProductAddActivity : AppCompatActivity() {
             }
     }
 
+    private fun getImage(category: String) {
+        FirebaseFirestore
+            .getInstance()
+            .collection("category")
+            .whereEqualTo("category", category)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val image = document.data["image"].toString()
+                    categoryId = document.data["uid"].toString()
+                    Glide.with(this)
+                        .load(image)
+                        .into(binding!!.image)
+                }
+            }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         binding = null
     }
 
-    companion object{
+    companion object {
         const val EXTRA_CATEGORY = "category"
     }
 }

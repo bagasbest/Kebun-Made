@@ -97,6 +97,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(productList[position])
+        holder.setIsRecyclable(false)
     }
 
     override fun getItemCount(): Int = productList.size

@@ -2,9 +2,11 @@ package com.project.kebunmade.homepage.product.cart
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.project.kebunmade.R
 import com.project.kebunmade.databinding.ActivityCartCheckoutBinding
+import com.project.kebunmade.homepage.HomepageActivity
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -42,15 +45,17 @@ class CartCheckoutActivity : AppCompatActivity() {
         }
 
         binding?.checkout?.setOnClickListener {
-            checkoutProduct()
+            val address = binding?.address?.text.toString()
+            if(address.isEmpty()) {
+                Toast.makeText(this, "Alamat anda tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            } else {
+                checkoutProduct(address)
+            }
         }
-
-
-
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun checkoutProduct() {
+    private fun checkoutProduct(address: String) {
 
         val mProgressDialog = ProgressDialog(this)
         mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...")
@@ -100,6 +105,10 @@ class CartCheckoutActivity : AppCompatActivity() {
                         "status" to "Belum Bayar",
                         "totalPrice" to totalPrice,
                         "userName" to name,
+                        "address" to address,
+                        "ongkir" to 0L,
+                        "isOngkirActive" to false,
+                        "paymentProof" to ""
                     )
 
 
@@ -205,13 +214,20 @@ class CartCheckoutActivity : AppCompatActivity() {
     private fun showSuccessDialogCart() {
         AlertDialog.Builder(this)
             .setTitle("Berhasil Membuat Order")
-            .setMessage("Silahkan cek menu order untuk melakukan pembayaran.\n\nTerima kasih")
+            .setMessage("Silahkan cek menu pesanan untuk melakukan pembayaran.\n\nTerima kasih")
             .setIcon(R.drawable.ic_baseline_check_circle_outline_24)
             .setPositiveButton("OKE") { dialogInterface, _ ->
-                binding?.checkout?.visibility = View.GONE
+                binding?.totalPrice?.text = "Rp.0"
                 binding?.subtotal?.text = "Rp.0"
+                binding?.checkout?.visibility = View.GONE
                 dialogInterface.dismiss()
-                onBackPressed()
+
+                val intent = Intent(this, HomepageActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+
+
             }
             .show()
     }

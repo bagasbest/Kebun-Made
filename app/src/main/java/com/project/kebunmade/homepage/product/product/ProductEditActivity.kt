@@ -14,29 +14,42 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.project.kebunmade.R
-import com.project.kebunmade.databinding.ActivityProductAddBinding
-import java.util.*
+import com.project.kebunmade.databinding.ActivityProductEditBinding
+import com.project.kebunmade.homepage.HomepageActivity
 
-class ProductAddActivity : AppCompatActivity() {
+class ProductEditActivity : AppCompatActivity() {
 
-    private var binding: ActivityProductAddBinding? = null
+    private var binding: ActivityProductEditBinding? = null
+    private var model: ProductModel? = null
     private var dp: String? = null
     private val REQUEST_FROM_GALLERY = 1001
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityProductAddBinding.inflate(layoutInflater)
+        binding = ActivityProductEditBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+
+        model = intent.getParcelableExtra(EXTRA_PRODUCT)
+        Glide.with(this)
+            .load(model?.image)
+            .into(binding!!.image)
+
+        binding?.name?.setText(model?.name)
+        binding?.description?.setText(model?.description)
+        binding?.info?.setText(model?.info)
+        binding?.caraPenyimpanan?.setText(model?.caraPenyimpanan)
+        binding?.price?.setText(model?.price.toString())
+
 
         binding?.backButton?.setOnClickListener {
             onBackPressed()
         }
 
-
         binding?.add?.setOnClickListener {
-            formValidation()
+            updateProduct()
         }
+
 
         // KLIK TAMBAH GAMBAR
         binding?.imageHint?.setOnClickListener {
@@ -47,75 +60,104 @@ class ProductAddActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun formValidation() {
+    private fun updateProduct() {
         val name = binding?.name?.text.toString().trim()
         val description = binding?.description?.text.toString().trim()
         val info = binding?.info?.text.toString().trim()
         val caraPenyimpanan = binding?.caraPenyimpanan?.text.toString().trim()
         val price = binding?.price?.text.toString().trim()
-        val category = intent.getStringExtra(EXTRA_CATEGORY)
 
         when {
             name.isEmpty() -> {
                 Toast.makeText(this, "Nama produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
             description.isEmpty() -> {
-                Toast.makeText(this, "Deskripsi produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Deskripsi produk tidak boleh kosong", Toast.LENGTH_SHORT)
+                    .show()
             }
             info.isEmpty() -> {
-                Toast.makeText(this, "Informasi mengenai produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Informasi mengenai produk tidak boleh kosong",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            price.isEmpty() || price == "0" -> {
+                Toast.makeText(this, "Harga produk tidak boleh kosong atau nol", Toast.LENGTH_SHORT)
+                    .show()
             }
             caraPenyimpanan.isEmpty() -> {
-                Toast.makeText(this, "Cara penyimpanan produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            }
-            price.isEmpty()  || price == "0" -> {
-                Toast.makeText(this, "Harga produk tidak boleh kosong atau nol", Toast.LENGTH_SHORT).show()
-            }
-            dp == null -> {
-                Toast.makeText(this, "Gambar produk tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Cara penyimpanan produk tidak boleh kosong",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             else -> {
 
                 binding?.progressBar?.visibility = View.VISIBLE
-                val productId = System.currentTimeMillis().toString()
 
-                val data = mapOf(
-                    "category" to category,
-                    "productId" to productId,
-                    "info" to info,
-                    "caraPenyimpanan" to caraPenyimpanan,
-                    "image" to dp,
-                    "name" to name,
-                    "nameTemp" to name.lowercase(Locale.getDefault()),
-                    "description" to description,
-                    "price" to price.toLong()
-                )
+                if (dp == null) {
+                    val data = mapOf(
+                        "info" to info,
+                        "caraPenyimpanan" to caraPenyimpanan,
+                        "name" to name,
+                        "description" to description,
+                        "price" to price.toLong()
+                    )
 
-                FirebaseFirestore
-                    .getInstance()
-                    .collection("product")
-                    .document(productId)
-                    .set(data)
-                    .addOnCompleteListener {
-                        if(it.isSuccessful) {
-                            binding?.progressBar?.visibility = View.GONE
-                            showSuccessDialog()
-                        } else {
-                            binding?.progressBar?.visibility = View.GONE
-                            showFailureDialog()
-                        }
+                    model?.productId?.let { it ->
+                        FirebaseFirestore
+                            .getInstance()
+                            .collection("product")
+                            .document(it)
+                            .update(data)
+                            .addOnCompleteListener { data ->
+                                if (data.isSuccessful) {
+                                    binding?.progressBar?.visibility = View.GONE
+                                    showSuccessDialog()
+                                } else {
+                                    binding?.progressBar?.visibility = View.GONE
+                                    showFailureDialog()
+                                }
+                            }
                     }
 
+                } else {
+                    val data = mapOf(
+                        "info" to info,
+                        "caraPenyimpanan" to caraPenyimpanan,
+                        "image" to dp,
+                        "name" to name,
+                        "description" to description,
+                        "price" to price.toLong()
+                    )
+
+                    model?.productId?.let {
+                        FirebaseFirestore
+                            .getInstance()
+                            .collection("product")
+                            .document(it)
+                            .update(data)
+                            .addOnCompleteListener { data ->
+                                if (data.isSuccessful) {
+                                    binding?.progressBar?.visibility = View.GONE
+                                    showSuccessDialog()
+                                } else {
+                                    binding?.progressBar?.visibility = View.GONE
+                                    showFailureDialog()
+                                }
+                            }
+                    }
+                }
             }
         }
     }
 
-
     private fun showFailureDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Gagal Menambahkan Produk")
-            .setMessage("Terdapat kesalahan ketika menambahkan produk, silahkan periksa koneksi internet anda, dan coba lagi nanti")
+            .setTitle("Gagal Memperbarui Produk")
+            .setMessage("Terdapat kesalahan ketika memperbarui produk, silahkan periksa koneksi internet anda, dan coba lagi nanti")
             .setIcon(R.drawable.ic_baseline_clear_24)
             .setPositiveButton("OKE") { dialogInterface, _ ->
                 dialogInterface.dismiss()
@@ -125,12 +167,15 @@ class ProductAddActivity : AppCompatActivity() {
 
     private fun showSuccessDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Berhasil Menambahkan Produk")
-            .setMessage("Produk terbaru ini akan segera terbit")
+            .setTitle("Berhasil Memperbarui Produk")
+            .setMessage("Sukses")
             .setIcon(R.drawable.ic_baseline_check_circle_outline_24)
             .setPositiveButton("OKE") { dialogInterface, _ ->
                 dialogInterface.dismiss()
-                onBackPressed()
+                val intent = Intent(this, HomepageActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
             }
             .show()
     }
@@ -191,7 +236,7 @@ class ProductAddActivity : AppCompatActivity() {
         binding = null
     }
 
-    companion object{
-        const val EXTRA_CATEGORY = "category"
+    companion object {
+        const val EXTRA_PRODUCT = "product"
     }
 }

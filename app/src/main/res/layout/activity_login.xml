@@ -22,7 +22,7 @@
             app:iss_error_image="@drawable/loading"
             app:iss_period="1000"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.65"
+            app:layout_constraintHeight_percent="0.59"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +34,7 @@
             android:background="@drawable/bg_rounded_login"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintHeight_percent="0.45"
             app:layout_constraintStart_toStartOf="parent" />
 
 
@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Isi kata sandi"
-                android:inputType="phone" />
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,7 +129,9 @@
             android:padding="10dp"
             android:text="Belum punya akun?   Daftar Sekarang"
             android:textColor="@color/black"
+            android:layout_marginBottom="10dp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button" />

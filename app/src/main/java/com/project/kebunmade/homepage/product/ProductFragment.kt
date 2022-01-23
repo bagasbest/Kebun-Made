@@ -12,6 +12,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.project.kebunmade.LoginActivity
 import com.project.kebunmade.R
 import com.project.kebunmade.databinding.FragmentProductBinding
 import com.project.kebunmade.homepage.product.cart.CartActivity
@@ -119,7 +120,12 @@ class ProductFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.logout?.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
 
+            val intent = Intent(activity, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            activity?.finish()
         }
 
         binding?.cart?.setOnClickListener {

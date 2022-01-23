@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KebunMade">
         <activity
+            android:name=".homepage.product.category.CategoryEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".homepage.chat.message.MessageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".homepage.order.OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".homepage.product.product.ProductEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".homepage.product.cart.CartCheckoutActivity"
             android:exported="false" />
         <activity
